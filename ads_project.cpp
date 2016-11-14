@@ -115,8 +115,8 @@ struct node * pairwise_comb(struct node *root1,struct node *root2)
     }
     //we will take out the root2 node (i.e. the smaller node (without changing the structure of the heap and then combine the two node
     root2->parent=root1;
-    root2->link_list_right->link_list_left=root2->link_list_left;
-    root2->link_list_left->link_list_right=root2->link_list_right;
+    //root2->link_list_right->link_list_left=root2->link_list_left;
+    //root2->link_list_left->link_list_right=root2->link_list_right;
     root1->degree=root1->degree+1;
     root2->child_cut=false;
     if(root1!=NULL && root1->link_child==NULL)
@@ -189,7 +189,7 @@ struct node * remove_max()
         struct node *temp2=temp;
         do
         {
-
+            temp->child_cut=false;
             temp->parent=NULL;
             temp=temp->link_list_left;
         }
@@ -202,11 +202,6 @@ struct node * remove_max()
     struct node *temp1=head->link_list_right;
     head->link_list_left->link_list_right=head->link_list_right;
     head->link_list_right->link_list_left=head->link_list_left;
-    if(temp1->link_list_left==temp1)
-    {
-        head=temp1;
-        return value_saver;
-    }
     struct node *temp2=temp1;
     head=temp1;
     vector<struct node *> l=check(temp2);
@@ -214,8 +209,27 @@ struct node * remove_max()
     table.clear();
     while(i<l.size())
     {
-        temp1=pairwise_vec(l[i]);
+        pairwise_vec(l[i]);
         i++;
+    }
+    std::map <int,struct node *>::iterator it=table.begin();
+    struct node *p=NULL;
+    while(it!=table.end())
+    {
+        if(p==NULL)
+        {
+            p=(*it).second;
+            p->link_list_left=p;
+            p->link_list_right=p;
+        }
+        else
+        {
+            struct node *q=(*it).second;
+            q->link_list_left=q;
+            q->link_list_right=q;
+            meld(p,q);
+        }
+        it++;
     }
     return value_saver;
 }
@@ -248,31 +262,7 @@ int increasekey(struct node *root,int freq)
         }
         else
         {
-            if(root->parent->child_cut==false)
-            {
-                if(root->link_list_left==root)
-                {
-                    root->parent->link_child=NULL;
-                }
-                else
-                {
-                    root->parent->link_child=root->link_list_left;
-                    root->link_list_left->link_list_right=root->link_list_right;
-                    root->link_list_right->link_list_left=root->link_list_left;
-                    root->link_list_left=root;
-                    root->link_list_right=root;
-                }
-                root->parent->degree=root->parent->degree-1;
-                root->parent->child_cut=true;
-                root->parent=NULL;
-                meld(head,root);
-                if(head->val<root->val)
-                {
-                    head=root;
-                }
-                return 1;
-            }
-            while(root->parent!=NULL && root->parent->child_cut!=false)
+            do
             {
                 if(root->link_list_left==root)
                 {
@@ -295,7 +285,7 @@ int increasekey(struct node *root,int freq)
                     head=root;
                 }
                 root=temp;
-            }
+            } while(root!=NULL && root->parent!=NULL && root->child_cut!=false);
             if(root!=NULL && root->parent!=NULL)
             {
                 root->child_cut=true;//edited here
@@ -304,7 +294,6 @@ int increasekey(struct node *root,int freq)
     }
     return 0;
 }
-
 int main(int argc,char * args[])
 {
     fstream ofile;
@@ -370,13 +359,13 @@ int main(int argc,char * args[])
             while(i<saving.size())
             {
                     ifile<<saving[i]->key;
-                    //std::cout<<saving[i]->key<<",";
+                    //std::cout<<saving[i]->key<<","<<saving[i]->val<<",";
                     if(i<(saving.size()-1))
                     {
                        ifile<<",";
                     }
                     saving[i]->parent=NULL;
-                    saving[i]->link_child=NULL;
+                    //saving[i]->link_child=NULL;
                     saving[i]->child_cut=false;
                     saving[i]->degree=0;
                     saving[i]->link_list_right=saving[i];
