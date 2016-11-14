@@ -1,0 +1,33 @@
+# depslib dependency file v1.0
+1479062949 source:c:\users\karan\desktop\work\ads_project.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<stdlib.h>
+	<map>
+	<vector>
+	<unordered_map>
+	<algorithm>
+
+1475880636 source:c:\users\karan\desktop\work\ads_project\garbage.c
+
+1476220546 source:c:\users\karan\desktop\work\ads_project\ads_project_linux.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<stdlib.h>
+	<map>
+	<vector>
+	<bits/stdc++.h>
+	<algorithm>
+
+1476231240 source:c:\users\karan\desktop\work\ads_project\linux_ads.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<stdlib.h>
+	<map>
+	<vector>
+	<bits/stdc++.h>
+	<algorithm>
+
