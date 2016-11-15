@@ -54,10 +54,6 @@ vector<struct node *> check(struct node *root)
     do
     {
         tell.push_back(temp);
-        if(head->val<temp->val)
-        {
-            head=temp;
-        }
         temp=temp->link_list_left;
     }while(temp!=root);
     return tell;
@@ -107,6 +103,10 @@ struct node * add(string name,int freq)
 struct node * pairwise_comb(struct node *root1,struct node *root2)
 {
     //we will interchange the node if the root2 is bigger than root 1
+    if(root1==NULL || root2==NULL)
+    {
+        return root1;
+    }
     if(root2->val>root1->val)
     {
         struct node *temp=root1;
@@ -132,6 +132,7 @@ struct node * pairwise_comb(struct node *root1,struct node *root2)
         root2->link_list_left=root2;
         root2->link_list_right=root2;
         meld(temp,root2);
+        //root2->link_child=root2;
         return root1;
     }
     return NULL;
@@ -140,13 +141,16 @@ struct node * pairwise_comb(struct node *root1,struct node *root2)
 struct node * pairwise_vec(struct node *root)
 {
     //we will keep looping the element till we are able to enter an element in the map
-    int flag=1;
-    while(flag)
+    while(true)
     {
         std::map<int,struct node *>::iterator it;
         it=table.find(root->degree);
         if(it==table.end())
         {
+            if(head->val<root->val)
+            {
+                head=root;
+            }
             //here we will insert the element into hashmap and then return from the program
             table.insert(std::pair<int,struct node *>(root->degree,root));
             return root;
@@ -156,10 +160,6 @@ struct node * pairwise_vec(struct node *root)
             struct node *p=it->second;
             table.erase(it);
             root=pairwise_comb(p,root);
-        }
-        else
-        {
-            return NULL;
         }
     }
     return NULL;
@@ -189,7 +189,7 @@ struct node * remove_max()
         struct node *temp2=temp;
         do
         {
-            temp->child_cut=false;
+            //temp->child_cut=false;
             temp->parent=NULL;
             temp=temp->link_list_left;
         }
@@ -209,27 +209,25 @@ struct node * remove_max()
     table.clear();
     while(i<l.size())
     {
+        l[i]->link_list_left=NULL;
+        l[i]->link_list_right=NULL;
         pairwise_vec(l[i]);
         i++;
     }
-    std::map <int,struct node *>::iterator it=table.begin();
-    struct node *p=NULL;
+    std::map<int,struct node *>::iterator it=table.begin();
+    head=(*it).second;
+    head->link_list_left=head;
+    head->link_list_right=head;
     while(it!=table.end())
     {
-        if(p==NULL)
+        (*it).second->link_list_left=(*it).second;
+        (*it).second->link_list_right=(*it).second;
+        meld(head,(*it).second);
+        if(head->val<(*it).second->val)
         {
-            p=(*it).second;
-            p->link_list_left=p;
-            p->link_list_right=p;
+            head=(*it).second;
         }
-        else
-        {
-            struct node *q=(*it).second;
-            q->link_list_left=q;
-            q->link_list_right=q;
-            meld(p,q);
-        }
-        it++;
+        ++it;
     }
     return value_saver;
 }
@@ -288,6 +286,7 @@ int increasekey(struct node *root,int freq)
             } while(root!=NULL && root->parent!=NULL && root->child_cut!=false);
             if(root!=NULL && root->parent!=NULL)
             {
+                std::cout<<"*\n";
                 root->child_cut=true;//edited here
             }
         }
@@ -308,7 +307,8 @@ int display_all(struct node *root,int i)
         {
             display_all(temp->link_child,i+1);
             t++;
-            temp=temp->link_list_left;
+            //std::cout<<temp->key<<temp->degree<<" "<<temp->val<<" "<<temp->child_cut<<" "<<i<<std::endl;
+            temp=temp->link_list_right;
         }while(temp!=root);
         return 0;
     }
@@ -338,11 +338,12 @@ int main(int argc,char * args[])
         int i=1;
         if(temp=="stop"||temp=="STOP")
         {
-             //display_all(head,0);
-             //if(t==umap.size())
-             //{
-             //    std::cout<<"sucess";
-             //}
+             display_all(head,0);
+             std::cout<<t<<" "<<umap.size();
+             if(t==umap.size())
+             {
+                 std::cout<<"sucess";
+             }
             return 0;
         }
         if(temp[flag]=='#')

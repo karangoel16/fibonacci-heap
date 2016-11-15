@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="C:\Users\Karan\Desktop\work\sample.txt" />
+				<Option parameters="C:\Users\Karan\Desktop\work\sample_2.txt" />
 				<Option host_application="hastagcounter" />
 				<Option run_host_application_in_terminal="1" />
 				<Compiler>
@@ -35,11 +35,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="../ads_project.cpp" />
+		<Unit filename="../ads_project.cpp">
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="ads_project.cpp" />
 		<Unit filename="garbage.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
-		<Unit filename="version.h" />
+		<Unit filename="version.h">
+			<Option target="Release" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />
