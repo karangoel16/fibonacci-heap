@@ -308,7 +308,6 @@ int display_all(struct node *root,int i)
         {
             display_all(temp->link_child,i+1);
             t++;
-            //std::cout<<temp->key<<temp->degree<<" "<<temp->val<<" "<<temp->child_cut<<" "<<i<<std::endl;
             temp=temp->link_list_left;
         }while(temp!=root);
         return 0;
@@ -339,11 +338,11 @@ int main(int argc,char * args[])
         int i=1;
         if(temp=="stop"||temp=="STOP")
         {
-             display_all(head,0);
-             if(t==umap.size())
-             {
-                 std::cout<<"sucess";
-             }
+             //display_all(head,0);
+             //if(t==umap.size())
+             //{
+             //    std::cout<<"sucess";
+             //}
             return 0;
         }
         if(temp[flag]=='#')
