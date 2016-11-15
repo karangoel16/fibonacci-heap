@@ -294,10 +294,31 @@ int increasekey(struct node *root,int freq)
     }
     return 0;
 }
+int t;
+int display_all(struct node *root,int i)
+{
+    if(root==NULL)
+    {
+        return 0;
+    }
+    else
+    {
+        struct node *temp=root;
+        do
+        {
+            display_all(temp->link_child,i+1);
+            t++;
+            //std::cout<<temp->key<<temp->degree<<" "<<temp->val<<" "<<temp->child_cut<<" "<<i<<std::endl;
+            temp=temp->link_list_left;
+        }while(temp!=root);
+        return 0;
+    }
+}
 int main(int argc,char * args[])
 {
     fstream ofile;
     ofstream ifile;
+    t=0;
     ifile.open("output_file.txt");
     if(!ifile)
     {
@@ -310,16 +331,19 @@ int main(int argc,char * args[])
         std::cout<<"The file can not be opened";
         return -1;
     }
-    int te=0;
     while(!ofile.eof())
     {
-        te++;
         string temp;
         getline(ofile,temp);
         int flag=0;
         int i=1;
         if(temp=="stop"||temp=="STOP")
         {
+             display_all(head,0);
+             if(t==umap.size())
+             {
+                 std::cout<<"sucess";
+             }
             return 0;
         }
         if(temp[flag]=='#')
@@ -365,7 +389,7 @@ int main(int argc,char * args[])
                        ifile<<",";
                     }
                     saving[i]->parent=NULL;
-                    //saving[i]->link_child=NULL;
+                    saving[i]->link_child=NULL;
                     saving[i]->child_cut=false;
                     saving[i]->degree=0;
                     saving[i]->link_list_right=saving[i];
