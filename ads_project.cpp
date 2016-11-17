@@ -171,6 +171,7 @@ struct node * remove_max()
     //temp2 is to create a new list
     if(head==NULL)
     {
+        //if head is null and nothing
         return head;
     }
     //if head is the only element in the heap
@@ -198,7 +199,7 @@ struct node * remove_max()
         meld(head,temp);
     }
     //this is to remove the head without changing the structure of the fibonacci heap
-    struct node *value_saver = head;
+    struct node *value_saver = head;//this is used to save the value which is returned later to be used by main program for later input in the heap
     struct node *temp1=head->link_list_right;
     head->link_list_left->link_list_right=head->link_list_right;
     head->link_list_right->link_list_left=head->link_list_left;
@@ -233,7 +234,6 @@ struct node * remove_max()
 }
 
 //it is used to increase a particular key and then check if it greater than parent and perform child cut if necessary
-
 int increasekey(struct node *root,int freq)
 {
     //this is done to check if the root is not null
@@ -264,16 +264,19 @@ int increasekey(struct node *root,int freq)
             {
                 if(root->link_list_left==root)
                 {
+                    //if root is the only child in the parent then in order to remove it , we will need to make child pointer to be  null
                     root->parent->link_child=NULL;
                 }
                 else
                 {
+                    //if root has many other child as well then we will remove the pointer to be removed
                     root->parent->link_child=root->link_list_left;
                     root->link_list_left->link_list_right=root->link_list_right;
                     root->link_list_right->link_list_left=root->link_list_left;
                     root->link_list_left=root;
                     root->link_list_right=root;
                 }
+                //root's parent degree has to be reduced as one element has been taken out of the loop
                 root->parent->degree=root->parent->degree-1;
                 struct node *temp=root->parent;
                 root->parent=NULL;
@@ -286,13 +289,14 @@ int increasekey(struct node *root,int freq)
             } while(root!=NULL && root->parent!=NULL && root->child_cut!=false);
             if(root!=NULL && root->parent!=NULL)
             {
-                std::cout<<"*\n";
-                root->child_cut=true;//edited here
+                //make the last root accessed by the node to be true
+                root->child_cut=true;
             }
         }
     }
     return 0;
 }
+/*
 int t;
 int display_all(struct node *root,int i)
 {
@@ -312,7 +316,7 @@ int display_all(struct node *root,int i)
         }while(temp!=root);
         return 0;
     }
-}
+}*/
 int main(int argc,char * args[])
 {
     fstream ofile;
@@ -344,6 +348,8 @@ int main(int argc,char * args[])
              {
                  std::cout<<"sucess";
              }
+            ifile.close();
+            ofile.close();
             return 0;
         }
         if(temp[flag]=='#')
